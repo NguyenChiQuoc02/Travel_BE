@@ -1,5 +1,8 @@
 package com.cfctechnology.travel.Model;
 
+import com.cfctechnology.travel.Model.Enum.EBookingStatus;
+import com.cfctechnology.travel.Model.Enum.EPaymentMethod;
+import com.cfctechnology.travel.Model.Enum.EPaymentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,27 +27,18 @@ public class Booking implements Serializable {
     private LocalDate bookingDate;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private EBookingStatus status;
 
     private LocalDate paymentDate;
 
     private Double amount;
 
     @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod;
+    private EPaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    private EPaymentStatus paymentStatus;
 
-    public enum Status {
-        CONFIRMED, PENDING
-    }
 
-    public enum PaymentMethod {
-        CASH, CARD, TRANSFER
-    }
 
-    public enum PaymentStatus {
-        SUCCESS, FAILED, PENDING
-    }
 }

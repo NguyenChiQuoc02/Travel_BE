@@ -1,5 +1,6 @@
 package com.cfctechnology.travel.Service;
 
+import com.cfctechnology.travel.Model.Enum.ERole;
 import com.cfctechnology.travel.Model.User;
 import com.cfctechnology.travel.Repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class UserService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
         newUser.setEmail(user.getEmail());
-        newUser.setRole(User.Role.CUSTOMER);
+        newUser.setRole(ERole.CUSTOMER);
         newUser.setPhoneNumber(user.getPhoneNumber());
         return userRepository.save(newUser);
     }
@@ -39,7 +40,7 @@ public class UserService {
         upUser.setUsername(user.getUsername());
         upUser.setPassword(user.getPassword());
         upUser.setEmail(user.getEmail());
-        upUser.setRole(User.Role.CUSTOMER);
+        upUser.setRole(ERole.CUSTOMER);
         upUser.setPhoneNumber(user.getPhoneNumber());
         return userRepository.save(upUser);
     }

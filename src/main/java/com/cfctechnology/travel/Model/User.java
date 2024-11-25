@@ -1,5 +1,6 @@
 package com.cfctechnology.travel.Model;
 
+import com.cfctechnology.travel.Model.Enum.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,11 +24,8 @@ public class User implements Serializable {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-        private Role role;
+        private ERole role;
 
-    public enum Role {
-        CUSTOMER, ADMIN
-    }
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
