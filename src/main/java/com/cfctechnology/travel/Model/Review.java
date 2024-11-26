@@ -27,4 +27,5 @@ public class Review implements Serializable {
     private String comment;
 
     private LocalDate reviewDate;
+
 }

@@ -28,9 +28,15 @@ public class Tour implements Serializable {
     private LocalDate endDate;
 
     @Column(length = 1000)
-    private String description;
+    private String descriptionTour;
 
     @JsonIgnore
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TourCategory> tourCategories;
+
+
 }

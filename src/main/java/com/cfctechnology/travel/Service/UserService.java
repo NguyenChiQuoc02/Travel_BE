@@ -1,8 +1,12 @@
 package com.cfctechnology.travel.Service;
 
 import com.cfctechnology.travel.Model.Enum.ERole;
+import com.cfctechnology.travel.Model.PageResult;
 import com.cfctechnology.travel.Model.User;
 import com.cfctechnology.travel.Repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +25,26 @@ public class UserService {
         return user.orElse(null);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+//    public List<User> getAllUsers() {
+//        return userRepository.findAll();
+//    }
+
+    public PageResult<User> getPageUsers(int page, int size, String name){
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> users;
+        if (name != null && !name.isEmpty()) {
+            users = this.userRepository.findByNameContaining(name, pageable);
+        } else {
+            users = this.userRepository.findAll(pageable);
+        }
+        return new PageResult<>(users.getContent(), users.getTotalPages());
     }
+
     public User createUser(User user) {
 
         User newUser = new User();
-        newUser.setUsername(user.getUsername());
+        newUser.setName(user.getName());
         newUser.setPassword(user.getPassword());
         newUser.setEmail(user.getEmail());
         newUser.setRole(ERole.CUSTOMER);
@@ -37,7 +54,7 @@ public class UserService {
 
     public User updateUser(User user,long id) {
         User upUser = this.getUserById(id);
-        upUser.setUsername(user.getUsername());
+        upUser.setName(user.getName());
         upUser.setPassword(user.getPassword());
         upUser.setEmail(user.getEmail());
         upUser.setRole(ERole.CUSTOMER);
