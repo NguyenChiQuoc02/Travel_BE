@@ -26,7 +26,6 @@ public class Booking implements Serializable {
     private Tour tour;
 
     @NotNull(message = "Booking date cannot be null")
-    @PastOrPresent(message = "Booking date must be in the past or present")
     private LocalDate bookingDate;
 
     @Enumerated(EnumType.STRING)

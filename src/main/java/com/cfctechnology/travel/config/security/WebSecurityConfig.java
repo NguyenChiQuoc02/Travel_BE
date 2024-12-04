@@ -54,8 +54,8 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
 
-                .authorizeHttpRequests(auth ->  auth.requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                        .requestMatchers("/customer/**").hasAnyRole("CUSTOMER")
+                .authorizeHttpRequests(auth ->  auth.requestMatchers("/admin/**").permitAll()
+//                        .requestMatchers("/customer/**").hasAnyRole("CUSTOMER")
                         .requestMatchers("/home/**", "/image/**", "/api/auth/**").permitAll()
                         .anyRequest().permitAll());
         http.authenticationProvider(authenticationProvider());

@@ -7,16 +7,17 @@ import com.cfctechnology.travel.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/tour")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class TourController {
 
     @Autowired
     private  TourService tourService;
 
-//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getTourById(@PathVariable("id") long id) {
         return ResponseEntity.status( HttpStatus.OK).body(new ResponseObject("ok", "get sucessfully",tourService.getTourById(id)));

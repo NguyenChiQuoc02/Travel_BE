@@ -127,7 +127,6 @@ public class BookingService {
     }
 
 
-
     public void deleteALl (){
          bookingRepository.deleteAll();
     }

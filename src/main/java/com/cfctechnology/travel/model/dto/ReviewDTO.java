@@ -13,6 +13,6 @@ public class ReviewDTO {
     private Destination destination;
     private Integer rating;
     private String comment;
-    private LocalDate reviewDate;
+    private LocalDate reviewDate = LocalDate.now();
 
 }

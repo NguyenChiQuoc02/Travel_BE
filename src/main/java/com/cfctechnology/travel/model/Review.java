@@ -30,6 +30,5 @@ public class Review implements Serializable {
     @Size(max = 1000, message = "Comment cannot exceed 1000 characters")
     private String comment;
 
-    @PastOrPresent(message = "Review date cannot be in the future")
     private LocalDate reviewDate;
 }

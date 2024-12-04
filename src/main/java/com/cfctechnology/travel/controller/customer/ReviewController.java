@@ -3,16 +3,19 @@ package com.cfctechnology.travel.controller.customer;
 import com.cfctechnology.travel.model.PageResult;
 import com.cfctechnology.travel.model.ResponseObject;
 import com.cfctechnology.travel.model.Review;
+import com.cfctechnology.travel.model.dto.ReviewDTO;
 import com.cfctechnology.travel.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
 @RestController("CustomerReview")
 @RequestMapping("/customer/review")
+@PreAuthorize("hasRole('ROLE_CUSTOMER')")
 public class ReviewController {
 
     @Autowired
@@ -32,9 +35,9 @@ public class ReviewController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> addReview(@RequestBody Review review,
+    public ResponseEntity<ResponseObject> addReview(@RequestBody ReviewDTO reviewDTO,
                                                     @RequestParam("destinationId" ) long destinationId){
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "add successfully", reviewService.createReview(review, destinationId)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "add successfully", reviewService.createReview(reviewDTO, destinationId)));
     }
 
     @PutMapping("/{id}")

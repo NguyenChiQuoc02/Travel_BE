@@ -29,7 +29,6 @@ public class Tour implements Serializable {
     private Double price;
 
     @NotNull(message = "Start date is required")
-    @FutureOrPresent(message = "Start date must be today or in the future")
     private LocalDate startDate;
 
     private LocalDate endDate;

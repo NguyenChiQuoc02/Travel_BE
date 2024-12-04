@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-
+@CrossOrigin("*")
 @RestController("HomeReviewController")
 @RequestMapping("/home/review")
 public class ReviewController {
@@ -28,6 +28,11 @@ public class ReviewController {
                                                         @RequestParam(value = "date", required = false) LocalDate date){
         PageResult<Review> reviews = reviewService.getPageReviews(page,size, date);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "get  all successfully", reviews));
+    }
+
+    @GetMapping("destination/{id}")
+    public ResponseEntity<ResponseObject> getReviewByDestinationId(@PathVariable("id") long id){
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "get  all successfully", this.reviewService.getReviews(id)));
     }
 
 

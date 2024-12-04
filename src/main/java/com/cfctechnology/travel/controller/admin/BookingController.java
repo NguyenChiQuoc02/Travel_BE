@@ -7,6 +7,7 @@ import com.cfctechnology.travel.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeParseException;
 
 @RestController("AdminBooking")
 @RequestMapping("admin/booking")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class BookingController {
     @Autowired
     private  BookingService bookingService;
@@ -44,7 +46,6 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject("ok", "Get all successfully", bookings));
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteBooking(@PathVariable("id") long id) {

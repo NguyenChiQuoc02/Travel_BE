@@ -4,9 +4,11 @@ import com.cfctechnology.travel.model.Destination;
 import com.cfctechnology.travel.model.PageResult;
 import com.cfctechnology.travel.model.Review;
 import com.cfctechnology.travel.model.User;
+import com.cfctechnology.travel.model.dto.ReviewDTO;
 import com.cfctechnology.travel.repository.DestinationRepository;
 import com.cfctechnology.travel.repository.ReviewRepository;
 import com.cfctechnology.travel.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,11 +28,17 @@ public class ReviewService {
     private  UserRepository userRepository;
     @Autowired
     private  DestinationRepository destinationRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     public Review getReview(long id) {
         Optional<Review> review = reviewRepository.findById(id);
         return review.orElse(null);
+    }
+
+    public List<Review> getReviews(long id) {
+        return reviewRepository.findByDestinationDestinationId(id);
     }
 
     public PageResult<Review> getPageReviews(int page, int size, LocalDate date){
@@ -44,7 +53,7 @@ public class ReviewService {
         return new PageResult<>(reviews.getContent(), reviews.getTotalPages());
     }
 
-    public Review createReview(Review review  , long destinationId ) {
+    public Review createReview(ReviewDTO reviewDTO  , long destinationId ) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByName(username)
@@ -52,14 +61,12 @@ public class ReviewService {
 
         Optional<Destination> destination = destinationRepository.findById(destinationId);
 
-        Review newReview = new Review();
-        newReview.setReviewDate(LocalDate.now());
-        newReview.setRating(review.getRating());
-        newReview.setComment(review.getComment());
-        newReview.setUser(user);
-        newReview.setDestination(destination.get());
+        Review review =  modelMapper.map(reviewDTO, Review.class);
 
-        return reviewRepository.save(newReview);
+        review.setUser(user);
+        review.setDestination(destination.get());
+
+        return reviewRepository.save(review);
 
     }
 

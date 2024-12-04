@@ -1,6 +1,7 @@
 package com.cfctechnology.travel.service;
 
 import com.cfctechnology.travel.model.*;
+import com.cfctechnology.travel.model.enum_model.EBookingStatus;
 import com.cfctechnology.travel.repository.BookingRepository;
 import com.cfctechnology.travel.repository.DestinationRepository;
 import com.cfctechnology.travel.repository.TourCategoryRepository;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,18 +35,37 @@ public class TourService {
     public PageResult<Tour> getPageTours(int page, int size, String name){
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Tour> users;
+        Page<Tour> tours;
         if (name != null && !name.isEmpty()) {
-            users = tourRepository.findByNameContaining(name, pageable);
+            tours = tourRepository.findByNameContaining(name, pageable);
         } else {
-            users = tourRepository.findAll(pageable);
+            tours = tourRepository.findAll(pageable);
         }
-        return new PageResult<>(users.getContent(), users.getTotalPages());
+        return new PageResult<>(tours.getContent(), tours.getTotalPages());
     }
+
+    public PageResult<Tour> searchTours(int page, int size, String name, Double minPrice, Double maxPrice, LocalDate startDate ) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Tour> tours;
+        tours = tourRepository.searchTours(name, minPrice, maxPrice, startDate, pageable);
+        return new PageResult<>(tours.getContent(), tours.getTotalPages());
+    }
+
+    public List<Tour> geTourByDestinationId(long destinationId){
+
+        List<Tour> destinations;
+
+            destinations = tourRepository.findToursByDestinationId(destinationId);
+
+        return destinations;
+    }
+
 
     public Tour createTour(Tour tour, long destinationId) {
         Optional<Destination> destination = destinationRepository.findById(destinationId);
         if(destination.isPresent()) {
+            tour.setDestination(destination.get());
             return tourRepository.save(tour);
         }
         return null;
@@ -72,14 +93,14 @@ public class TourService {
         if (tour.isPresent() ) {
             List<Booking> bookings = tour.get().getBookings();
             for (Booking booking : bookings) {
-                bookingRepository.deleteById(booking.getBookingId());
+                booking.setStatus(EBookingStatus.DELETED);
+                booking.setTour(null);
             }
             List<TourCategory> tourCategories = tour.get().getTourCategories();
             for(TourCategory tourCategory : tourCategories) {
-                tourCategoryRepository.deleteById(tourCategory.getId());
+                tourCategory.setTour(null);
             }
             tourRepository.deleteById(id);
         }
-        tourRepository.deleteById(id);
     }
 }
