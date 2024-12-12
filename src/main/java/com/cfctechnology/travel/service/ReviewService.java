@@ -53,13 +53,13 @@ public class ReviewService {
         return new PageResult<>(reviews.getContent(), reviews.getTotalPages());
     }
 
-    public Review createReview(ReviewDTO reviewDTO  , long destinationId ) {
+    public Review createReview(ReviewDTO reviewDTO  ) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByName(username)
                 .orElseThrow(() -> new IllegalArgumentException("User không tồn tại."));
 
-        Optional<Destination> destination = destinationRepository.findById(destinationId);
+        Optional<Destination> destination = destinationRepository.findById(reviewDTO.getDestination().getDestinationId());
 
         Review review =  modelMapper.map(reviewDTO, Review.class);
 

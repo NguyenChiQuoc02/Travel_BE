@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
+//@CrossOrigin("*")
+@CrossOrigin(origins = {"https://sound-honestly-bird.ngrok-free.app", "*"})
+
 @RestController("HomeDestination")
 @RequestMapping("/home/destination")
 public class DestinationController {

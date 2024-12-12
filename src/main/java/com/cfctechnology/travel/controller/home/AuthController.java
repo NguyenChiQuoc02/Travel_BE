@@ -29,7 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -58,6 +59,13 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+
+        User user = userRepository.findByName(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Error: User not found."));
+
+        if (user.isDeleted()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: This user has been deleted."));
+        }
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
@@ -75,14 +83,14 @@ public class AuthController {
 
         if (userRepository.existsByName(signUpRequest.getUsername())) {
             return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .ok()
+                    .body(new MessageResponse("Username đã tồn tại!"));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .ok()
+                    .body(new MessageResponse("Email đã tồn tại"));
         }
 
         User user = new User();
@@ -104,7 +112,7 @@ public class AuthController {
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Thành công!"));
     }
 
 }

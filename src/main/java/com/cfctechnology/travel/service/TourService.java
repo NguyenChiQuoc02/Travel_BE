@@ -52,14 +52,17 @@ public class TourService {
         return new PageResult<>(tours.getContent(), tours.getTotalPages());
     }
 
-    public List<Tour> geTourByDestinationId(long destinationId){
+    public PageResult<Tour> geTourByDestinationId(long destinationId){
 
-        List<Tour> destinations;
+        Pageable pageable = PageRequest.of(0, 6);
+        Page<Tour> tours;
 
-            destinations = tourRepository.findToursByDestinationId(destinationId);
+            tours = tourRepository.findToursByDestinationId(destinationId,pageable);
 
-        return destinations;
+        return new PageResult<>(tours.getContent(), tours.getTotalPages());
+
     }
+
 
 
     public Tour createTour(Tour tour, long destinationId) {

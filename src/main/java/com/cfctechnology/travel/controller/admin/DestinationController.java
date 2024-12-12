@@ -11,8 +11,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @RestController("AdminDestination")
 @RequestMapping("admin/destination")
+//@CrossOrigin("*")
+@CrossOrigin(origins = {"https://sound-honestly-bird.ngrok-free.app", "*"})
+
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class DestinationController {
 
@@ -32,6 +36,11 @@ public class DestinationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "get all successfully", des));
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<ResponseObject> getDestinationList(){
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok","get all successfully", destinationService.getAllDestinations()));
+    }
+
     @PostMapping("")
     public ResponseEntity<ResponseObject> addDestination(@RequestParam("file") MultipartFile file,
                                                          @RequestParam("name") String name,
@@ -44,7 +53,7 @@ public class DestinationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseObject> updateDestination(@PathVariable("id") long id,
-                                                            @RequestParam("file") MultipartFile file,
+                                                            @RequestParam(value = "file" , required = false ) MultipartFile file,
                                                             @RequestParam("name") String name,
                                                             @RequestParam("description") String description,
                                                             @RequestParam("location") String location) throws Exception {

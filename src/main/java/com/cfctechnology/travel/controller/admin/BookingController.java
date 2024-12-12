@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-
+//@CrossOrigin("*")
+@CrossOrigin(origins = {"https://sound-honestly-bird.ngrok-free.app", "*"})
 @RestController("AdminBooking")
 @RequestMapping("admin/booking")
 @PreAuthorize("hasRole('ROLE_ADMIN')")

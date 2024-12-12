@@ -15,9 +15,10 @@ import java.util.List;
 @Repository
 public interface TourRepository extends JpaRepository<Tour, Long> {
     Page<Tour> findByNameContaining(String name, Pageable pageable);
-    @Query("SELECT t FROM Tour t WHERE t.destination.destinationId = :destinationId")
-    List<Tour> findToursByDestinationId(@Param("destinationId") Long destinationId);
 
+
+    @Query("SELECT t FROM Tour t WHERE (:destinationId IS NULL OR t.destination.destinationId = :destinationId)")
+    Page<Tour> findToursByDestinationId(@Param("destinationId") Long destinationId, Pageable pageable);
 
     @Query("SELECT t FROM Tour t " +
             "WHERE (:name IS NULL OR LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +

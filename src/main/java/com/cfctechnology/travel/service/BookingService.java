@@ -60,6 +60,14 @@ public class BookingService {
         return new PageResult<>(bookings.getContent(), bookings.getTotalPages());
     }
 
+    public long getTotalBookingsCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User không tồn tại."));
+
+        return bookingRepository.countBookingsByUserId(user.getUserId());
+    }
+
 
     public Booking createBooking(BookingDTO bookingDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -68,6 +76,8 @@ public class BookingService {
 
         Tour tour = tourRepository.findById(bookingDTO.getTour().getTourId())
                 .orElseThrow(() -> new IllegalArgumentException("Tour không tồn tại."));
+
+
 
         Booking booking = modelMapper.map(bookingDTO, Booking.class);
         booking.setUser(user);

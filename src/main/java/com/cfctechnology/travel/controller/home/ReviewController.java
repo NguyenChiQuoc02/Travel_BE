@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-@CrossOrigin("*")
+//@CrossOrigin("*")
+@CrossOrigin(origins = {"https://sound-honestly-bird.ngrok-free.app", "*"})
+
 @RestController("HomeReviewController")
 @RequestMapping("/home/review")
 public class ReviewController {

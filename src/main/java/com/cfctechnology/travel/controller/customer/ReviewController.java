@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-
+@CrossOrigin("*")
 @RestController("CustomerReview")
 @RequestMapping("/customer/review")
 @PreAuthorize("hasRole('ROLE_CUSTOMER')")
@@ -35,9 +35,9 @@ public class ReviewController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> addReview(@RequestBody ReviewDTO reviewDTO,
-                                                    @RequestParam("destinationId" ) long destinationId){
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "add successfully", reviewService.createReview(reviewDTO, destinationId)));
+    public ResponseEntity<ResponseObject> addReview(@RequestBody ReviewDTO reviewDTO
+                                                 ){
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "add successfully", reviewService.createReview(reviewDTO)));
     }
 
     @PutMapping("/{id}")

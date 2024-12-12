@@ -12,7 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"https://sound-honestly-bird.ngrok-free.app", "*"})
+
 @RestController("AdminCategory")
 @RequestMapping("/admin/category")
 @PreAuthorize("hasRole('ROLE_ADMIN')")

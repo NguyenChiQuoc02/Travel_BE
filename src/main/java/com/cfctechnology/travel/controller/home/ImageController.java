@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 
-@CrossOrigin("*")
+//@CrossOrigin("*")
+@CrossOrigin(origins = {"https://sound-honestly-bird.ngrok-free.app", "*"})
+
 @RestController
 @RequestMapping("/image")
 public class ImageController {

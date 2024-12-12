@@ -18,15 +18,15 @@ public class BookingDTO {
 
     private Tour tour;
 
-    private LocalDate bookingDate;
+    private LocalDate bookingDate = LocalDate.now();
 
     private EBookingStatus status;
 
-    private LocalDate paymentDate;
+    private LocalDate paymentDate = LocalDate.now();
 
     private Double amount;
 
-    private EPaymentMethod paymentMethod;
+    private EPaymentMethod paymentMethod ;
 
     private EPaymentStatus paymentStatus;
 }

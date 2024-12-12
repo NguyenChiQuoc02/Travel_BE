@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +40,9 @@ public class DestinationService {
         return new PageResult<>(des.getContent(), des.getTotalPages());
     }
 
+    public List<Destination> getAllDestinations() {
+        return destinationRepository.findAll();
+    }
     public Destination createDestination( MultipartFile multipartFile, String name, String description, String location) throws IOException {
 
         try{
@@ -69,16 +73,17 @@ public class DestinationService {
         Optional<Destination> destinationOptional = destinationRepository.findById(id);
         if (destinationOptional.isPresent()) {
 
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            String fileCode = FileUploadImage.saveFile(fileName,multipartFile);
-            String fileUrl = fileCode + "-" + fileName;
-
             Destination updateDes = destinationOptional.get();
-
+            if (multipartFile != null && !multipartFile.isEmpty()) {
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                String fileCode = FileUploadImage.saveFile(fileName, multipartFile);
+                String fileUrl = fileCode + "-" + fileName;
+                updateDes.setImageUrl(fileUrl);
+            }
             updateDes.setName(name);
             updateDes.setDescription(description);
             updateDes.setLocation(location);
-            updateDes.setImageUrl(fileUrl);
+
 
             return destinationRepository.save(updateDes);
 

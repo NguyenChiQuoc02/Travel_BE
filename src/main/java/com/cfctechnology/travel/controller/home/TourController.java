@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
-@CrossOrigin("*")
+//@CrossOrigin("*")
+@CrossOrigin(origins = {"https://sound-honestly-bird.ngrok-free.app", "*"})
+
 @RestController("HomeTour")
 @RequestMapping("/home/tour")
 public class TourController {
@@ -45,6 +47,12 @@ public class TourController {
              ) {
         PageResult<Tour> tours = tourService.searchTours(page,size,name, minPrice, maxPrice, startDate);
         return ResponseEntity.ok(tours);
+    }
+
+    @GetMapping("/destination/{id}")
+    public ResponseEntity<ResponseObject> getTourByDestinationId(@PathVariable("id") long id) {
+        PageResult<Tour> tours = tourService.geTourByDestinationId(id);
+        return ResponseEntity.status( HttpStatus.OK).body(new ResponseObject("ok", "get sucessfully",tours));
     }
 
 }

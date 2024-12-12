@@ -9,12 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
 
+@CrossOrigin("*")
 @RestController("CustomerBooking")
 @RequestMapping("/customer/booking")
 @PreAuthorize("hasRole('ROLE_CUSTOMER')")
@@ -31,10 +29,18 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("fail 404", "not found id",null));
     }
 
+
+    @GetMapping("/total/current-user")
+    public ResponseEntity<ResponseObject> getTotalBooking() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "get successfully",bookingService.getTotalBookingsCurrentUser() ));
+    }
+
     @GetMapping("/payment")
     public ResponseEntity<ResponseObject> payment(@RequestParam(value= "userId", defaultValue = "3") long userId) {
              return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "payment successfully", bookingService.payment(userId)));
     }
+
+
 
     @PostMapping
     public ResponseEntity<ResponseObject> createBooking(@Valid @RequestBody BookingDTO bookingDTO) {

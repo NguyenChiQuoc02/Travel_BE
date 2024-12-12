@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +21,13 @@ public class UserService {
     public User getUserById(long id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);
+    }
+    public User getCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User không tồn tại."));
+
+        return user;
     }
 
     public PageResult<User> getPageUsers(int page, int size, String name){
@@ -56,6 +64,10 @@ public class UserService {
     }
 
     public void deleteUser(long id) {
-        userRepository.deleteById(id);
+        Optional<User>   user = userRepository.findById(id);
+        if(user.isPresent()) {
+            user.get().setDeleted(true);
+            userRepository.save(user.get());
+        }
     }
 }

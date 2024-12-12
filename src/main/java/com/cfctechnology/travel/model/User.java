@@ -26,11 +26,13 @@ public class User implements Serializable {
     @Size(max = 255, message = "Email cannot exceed 255 characters")
     private String email;
 
+    private boolean deleted = false;
+
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
-    @Pattern(regexp = "^[0-9]{10,11}$", message = "Phone number must be between 10 and 11 digits")
+    @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number must be between 10 and 11 digits")
     private String phoneNumber;
 
     @ManyToMany(fetch = FetchType.LAZY)

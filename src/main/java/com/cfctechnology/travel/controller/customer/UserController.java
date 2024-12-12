@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin("*")
 @RestController("CustomerUser")
 @RequestMapping("/customer/user")
 @PreAuthorize("hasRole('ROLE_CUSTOMER')")
@@ -17,9 +17,9 @@ public class UserController {
     @Autowired
     private  UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getUserById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "get user successfully", userService.getUserById(id)));
+    @GetMapping("/current-user")
+    public ResponseEntity<ResponseObject> getUserById() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "get user successfully", userService.getCurrentUser()));
     }
 
     @PutMapping("/{id}")
